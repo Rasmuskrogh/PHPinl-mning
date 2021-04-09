@@ -127,8 +127,8 @@ class User {
 
         $return = $stm->fetch();       
         
-        if(isset($return["token"])) {
-            return $return["token"];
+        if(isset($return["Token"])) {
+            return $return["Token"];
         } else {
             return false;
         }
@@ -148,7 +148,7 @@ class User {
         
         if(isset($return["Token"])) {
 
-            $this->updateToken($return["Token"])
+            $this->updateToken($return["Token"]);
            
             return true;
         } else {
