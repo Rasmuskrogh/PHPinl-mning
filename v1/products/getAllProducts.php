@@ -4,21 +4,32 @@
     include("../../objects/Products.php");
     include("../../objects/Users.php");
     
-
     $token = "";
     if(isset($_GET["Token"])) {
-        $token = $GET["Token"];
+        $token = $_GET["Token"];
     } else {
-        echo "No token specified";
-    die();
+        $error = new stdClass();
+        $error->message ="Please login to access this page";
+        $error->code = "0004";
+        print_r(json_encode($error));
+        die();
     }
+
 
     $product = new Product($db);
-
-    if($product->validateToken($token)) {
+    $user = new User($db);
+    if($user->validateToken($token)) {
         $products = $product->getAllProducts();
-        print_r(json_encode($products));
+    print_r(json_encode($products));
+    
     } else {
-        echo "You have been logged out. Please login again to continue shopping.";
+        $error = new stdClass();
+        $error->message ="You have been logged out. Please login again";
+        $error->code = "0005";
+        print_r(json_encode($error));
+        die();
     }
+    
+    
+
 ?> 

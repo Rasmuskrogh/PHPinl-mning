@@ -3,3 +3,5 @@ Error messages:
 0001 = Could not execute query
 0002 = This use is already registered
 0003 = All arguments need a value
+0004 = Please login to access this page
+0005 = You have been logged out. Please login again

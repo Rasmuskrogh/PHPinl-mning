@@ -78,16 +78,17 @@ class User {
     }
 
     function login($username, $password) {
-        $sql = "SELECT ID, FirstName, LastName, Email, Username, Role FROM users WHERE Username=:username_IN AND Password=:password_IN";
+        $sql = "SELECT ID, FirstName, LastName, Email, Username, Password, Role FROM users WHERE Username=:username_IN AND Password=:password_IN";
         $stm = $this->db_conn->prepare($sql);
         $stm->bindParam(":password_IN",$password);
         $stm->bindParam(":username_IN",$username);
 
         $stm->execute();       
 
-        if($stm->rowCount() === 1) {
+        if($stm->rowCount() == 1) {
             $row = $stm->fetch();
              return $this->createToken($row["ID"], $row["Username"]);
+             return $this->checkRole
 
 
         }
@@ -159,12 +160,43 @@ class User {
 
     function updateToken($token) {
         $sql = "UPDATE sessions SET LastUsed=:lastUsed_IN WHERE Token=:token_IN";
-        $stm = $£this->db_conn->prepare($sql);
+        $stm = $this->db_conn->prepare($sql);
         $time = time();
         $stm->bindParam(":lastUsed_IN", $time); 
         $stm->bindParam(":token_IN", $token);
         $stm->execute(); 
     }
+
+    function checkRole($id) {
+        $sql = "SELECT Role FROM users WHERE ID=:id_IN";
+        $stm = $this->db_conn->prepare($sql);
+        $stm->bindParam(":id_IN", $id);
+        $stm->execute();
+        
+        $return = $stm->fetch();
+
+        if(isset($return["Role"])) {
+            return $return["Role"];
+        } else {
+            return false;
+        }
+    }
+
+    function validateRole($role) {
+        $sql = "SELECT Role FROM users WHERE Role=:role_IN";
+        $stm = $this-du_conn->prepare($sql);
+        $stm->bindParam(":role_IN", $role);
+        $stm->execute();
+
+        $return = $stm->fetch();
+
+        if(isset($return["Role"])) {
+            $return["Role"] == 
+        } else {
+            return false
+        }
+    }
+
 }
 
 ?>
