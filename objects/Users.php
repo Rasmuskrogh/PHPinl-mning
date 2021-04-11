@@ -172,21 +172,6 @@ class User {
         $stm->execute(); 
     }
 
-    // function checkRole($id) {
-    //     $sql = "SELECT Role FROM users WHERE ID=:id_IN";
-    //     $stm = $this->db_conn->prepare($sql);
-    //     $stm->bindParam(":id_IN", $id);
-    //     $stm->execute();
-        
-    //     $return = $stm->fetch();
-
-    //     if(isset($return["Role"])) {
-    //         return $return["Role"];
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
     function validateRole($token) {
         $sql = "SELECT Role FROM sessions s 
                 INNER JOIN users u on s.UserId = u.ID
@@ -197,7 +182,6 @@ class User {
 
         return $stm->fetch();
     }
-
 }
 
 ?>

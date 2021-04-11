@@ -3,7 +3,6 @@
 class Product {
 
     private $db_conn;
-   /*  private $productId; */
 
     function __construct($db) {
         $this->db_conn = $db;
