@@ -88,7 +88,7 @@ class User {
         if($stm->rowCount() == 1) {
             $row = $stm->fetch();
              return $this->createToken($row["ID"], $row["Username"]);
-             return $this->checkRole
+             return $this->checkRole();
 
 
         }
@@ -136,8 +136,13 @@ class User {
         
     }
 
+
     function validateToken($token)  {
-        $sql = "SELECT Token, LastUsed FROM sessions WHERE Token =:token_IN AND LastUsed > :activeTime_IN LIMIT 1";
+        $sql = "SELECT s.Token, s.LastUsed, u.Role FROM sessions s 
+                INNER JOIN users u ON s.UserId = u.ID 
+                WHERE Token =:token_IN 
+                AND LastUsed > :activeTime_IN LIMIT 1";
+
         $stm  = $this->db_conn->prepare($sql);
         $stm->bindParam(":token_IN", $token);
         $activeTime = time() - (60 * 60);
@@ -167,34 +172,30 @@ class User {
         $stm->execute(); 
     }
 
-    function checkRole($id) {
-        $sql = "SELECT Role FROM users WHERE ID=:id_IN";
-        $stm = $this->db_conn->prepare($sql);
-        $stm->bindParam(":id_IN", $id);
-        $stm->execute();
+    // function checkRole($id) {
+    //     $sql = "SELECT Role FROM users WHERE ID=:id_IN";
+    //     $stm = $this->db_conn->prepare($sql);
+    //     $stm->bindParam(":id_IN", $id);
+    //     $stm->execute();
         
-        $return = $stm->fetch();
+    //     $return = $stm->fetch();
 
-        if(isset($return["Role"])) {
-            return $return["Role"];
-        } else {
-            return false;
-        }
-    }
+    //     if(isset($return["Role"])) {
+    //         return $return["Role"];
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
-    function validateRole($role) {
-        $sql = "SELECT Role FROM users WHERE Role=:role_IN";
-        $stm = $this-du_conn->prepare($sql);
-        $stm->bindParam(":role_IN", $role);
+    function validateRole($token) {
+        $sql = "SELECT Role FROM sessions s 
+                INNER JOIN users u on s.UserId = u.ID
+                WHERE Token=:token";
+        $stm = $this->db_conn->prepare($sql);
+        $stm->bindParam(":token", $token);
         $stm->execute();
 
-        $return = $stm->fetch();
-
-        if(isset($return["Role"])) {
-            $return["Role"] == 
-        } else {
-            return false
-        }
+        return $stm->fetch();
     }
 
 }

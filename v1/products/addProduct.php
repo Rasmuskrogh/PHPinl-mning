@@ -3,12 +3,6 @@
 include("../../config/database.php");
 include("../../objects/Products.php");
 include("../../objects/Users.php");
-
-    $role = "";
-    if(($_GET["Role"])) {
-        $role = $_GET["Role"];
-        echo $role;
-    }
     
     $token = "";
     if(isset($_GET["Token"])) {
@@ -23,10 +17,15 @@ include("../../objects/Users.php");
 
     $product = new Product($db);
     $user = new User($db);
-    $users = new User($db);
-    if($user->validateToken($token) && $users->validateRole($role)) {
-        $product->createProduct("dsads","adsads","addsa");
-    print_r(json_encode($product));
+    $adminOrNot = $user->validateRole($token);
+
+    if($user->validateToken($token)) {
+        if($adminOrNot["Role"] === 'admin'){
+            $product->createProduct("dsadss","adsads","addsa, lallaa");
+            print_r(json_encode($product));
+        } else {
+            echo "Not an admin";
+        }
     
     } else {
         $error = new stdClass();
