@@ -8,7 +8,7 @@
             $this->db_conn = $db;
         }
 
-        function addToCart($productId, $userId) {
+        function addToCart($productId, $userId, $username, $name) {
             $userSql = "SELECT ID FROM users WHERE Username=:username_IN";
             $stm = $this->$db_conn->prepare($userSql);
             bindParam(":username_IN", $username);
