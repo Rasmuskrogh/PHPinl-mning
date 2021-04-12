@@ -84,7 +84,7 @@ class Product {
         } else {
             echo "No product with id: $productId found";
         }
-/* Funkar men får null efter korrekt meddelande */
+
     }
 
     function updateProduct($id, $name = "", $description = "", $type = "") {
