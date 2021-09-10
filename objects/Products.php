@@ -8,8 +8,8 @@ class Product {
         $this->db_conn = $db;
     }
 
-    function createProduct ($name, $description, $type) {
-        if(!empty($name) && !empty($description) && !empty($type)) {
+    function createProduct ($name, $description, $type, $price) {
+        if(!empty($name) && !empty($description) && !empty($type) && !empty($price)) {
             $sql ="SELECT ID FROM products WHERE Name=:name_IN AND Type=:type_IN";
             $stm = $this->db_conn->prepare($sql);
             $stm->bindParam(":name_IN", $name);
@@ -27,18 +27,19 @@ class Product {
                 die();
             }
 
-            $sql = "INSERT INTO products (Name, Description, Type) VALUES(:name_IN, :description_IN, :type_IN)";
+            $sql = "INSERT INTO products (Name, Description, Type, Price) VALUES(:name_IN, :description_IN, :type_IN, :price_IN)";
             $stm = $this->db_conn->prepare($sql);
             $stm->bindParam(":name_IN", $name);
             $stm->bindParam(":description_IN", $description);
             $stm->bindParam(":type_IN", $type);
+            $stm->bindParam(":price_IN", $price);
 
             if(!$stm->execute()) {
                 echo "Could not execute query";
                 die();
             }
 
-            echo " Name:$name Description:$description Type:$type";
+            echo " Name:$name Description:$description Type:$type Price:$price";
 
 
 
@@ -50,7 +51,7 @@ class Product {
     }
     
     function getAllProducts() {
-        $sql = "SELECT name, description, type FROM products";
+        $sql = "SELECT name, description, type, price FROM products";
         $stm = $this->db_conn->prepare($sql);
         $stm->execute();
         echo json_encode($stm->fetchAll());
@@ -58,7 +59,7 @@ class Product {
     }
 
     function getProduct($productId) {
-        $sql = "SELECT ID, Name, Description, Type FROM products WHERE ID=:productId_IN";
+        $sql = "SELECT ID, Name, Description, Type, Price FROM products WHERE ID=:productId_IN";
         $stm = $this->db_conn->prepare($sql);
         $stm->bindParam(":productId_IN", $productId);
         
@@ -87,7 +88,7 @@ class Product {
 
     }
 
-    function updateProduct($id, $name = "", $description = "", $type = "") {
+    function updateProduct($id, $name = "", $description = "", $type = "", $price = "") {
         
         $error = new StdClass();
 
@@ -100,6 +101,10 @@ class Product {
 
         if(!empty($type)) {
             $error->message = $this->updateType($id, $type);
+        }
+
+        if(!empty($price)) {
+            $error->message = $this->updatePrice($id, $price);
         }
 
         return $error;
@@ -135,6 +140,18 @@ class Product {
         $stm = $this->db_conn->prepare($sql);
         $stm->bindParam(":id_IN", $id);
         $stm->bindParam(":type_IN", $type);
+        $stm->execute();
+
+        if($stm->rowCount() < 1) {
+            return "No product with id:$id was found";
+        }
+    }
+
+    function updatePrice($id, $price) {
+        $sql = "UPDATE products SET Price=:price_IN WHERE ID=:id_IN";
+        $stm = $this->db_conn->prepare($sql);
+        $stm->bindParam(":id_IN", $id);
+        $stm->bindParam(":price_IN", $price);
         $stm->execute();
 
         if($stm->rowCount() < 1) {

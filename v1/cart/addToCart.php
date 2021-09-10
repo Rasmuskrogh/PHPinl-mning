@@ -1,7 +1,6 @@
 <?php
 
     include("../../config/database.php");
-    include("../../objects/Products.php");
     include("../../objects/Users.php");
     include("../../objects/CartFunctions.php");
 
@@ -25,7 +24,7 @@
         $Name= $_GET["Name"];
         $UserId=$_GET["UserID"];
         $Username=$_GET["Username"];
-        print_r($cart->addToCart($productId, $UserId, $Username, $Name));
+        print_r($cart->addToCart($productId, $UserId, $Username, $Name, $token));
 
     } else {
         $error = new stdClass();

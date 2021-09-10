@@ -21,7 +21,7 @@ include("../../objects/Users.php");
 
     if($user->validateToken($token)) {
         if($adminOrNot["Role"] === 'admin'){
-            $product->createProduct("dsadss","adsads","addsa");
+            $product->createProduct("Sandra Rivas","Loco Latina","food", 2);
             print_r(json_encode($product));
         } else {
             echo "Not an admin";
