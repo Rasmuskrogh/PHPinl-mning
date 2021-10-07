@@ -24,7 +24,8 @@
         $Name= $_GET["Name"];
         $UserId=$_GET["UserID"];
         $Username=$_GET["Username"];
-        print_r($cart->addToCart($productId, $UserId, $Username, $Name, $token));
+        $Price=$_GET["Price"];
+        print_r($cart->addToCart($productId, $UserId, $Username, $Name, $Price, $token));
 
     } else {
         $error = new stdClass();

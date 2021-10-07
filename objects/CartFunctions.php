@@ -21,24 +21,6 @@
             $stm->execute();
             $productId = $stm->fetch();
 
-            /* if(!empty($userId) && !empty($productId)) {
-            $sql = "SELECT UserID, ProductID, Token FROM cart WHERE UserID=:userId_IN AND ProductID=:productId_IN AND Token=:token_IN";
-            $stm = $this->db_conn->prepare($sql);
-            $stm->bindParam(":userId_IN", $userId[0]);
-            $stm->bindParam(":productId_IN", $productId[0]);
-            $stm->bindParam(":token_IN", $token);
-
-            if(!$stm->execute()) {
-                echo "unable to execute query";
-                die();
-            }
-
-            $row = $stm->rowCount();
-            if($row > 0) {
-                echo "product already in cart";
-                die();
-            } */
-
             $sql ="INSERT INTO cart(UserID, ProductID, Token) VALUES(:userId_IN, :productId_IN, :token_IN)";
             $stm = $this->db_conn->prepare($sql);
             $stm->bindParam(":userId_IN", $userId[0]);
@@ -53,24 +35,28 @@
             return "Product with ID: $productId[0] with added to cart by User: $userId[0]";
         }
 
-        /* function Checkout ($token, $userId, $productId, $username, $productName) { */
-        function Checkout ($username, $productName, $userId, $productId) {   
-            $sql ="SELECT Username FROM users WHERE ID=:userId_IN";
+
+        function Checkout ($token) {   
+             $sql ="SELECT b.*, c.firstname, c.lastname
+            FROM cart a
+            JOIN products b
+            ON a.productID = b.ID
+            JOIN users c
+            ON a.userID = c.ID
+            WHERE a.Token=:Token_IN";
             $stm = $this->db_conn->prepare($sql);
-            $stm->bindParam(":userId_IN", $userId);
+            $stm->bindParam(":Token_IN", $token);
             $stm->execute();
-            $username = $stm->fetch();
-
-            $sql ="SELECT Name FROM products WHERE ID=:productId_IN";
-            $stm = $this->db_conn->prepare($sql);
-            $stm->bindParam(":productId_IN", $productId);
-            $stm->execute();
-            $productName = $stm->fetch();
-
-            return "$productName, $username";
-
-
-
+            $row= $stm->fetch();
+            echo "Köpare:", " ", $row["firstname"], " ", $row["lastname"]; 
+            echo ("<br>");
+            echo ("<br>");
+            echo "Produkter:";
+            while ($row= $stm->fetch()) {
+                echo ("<pre>");
+                echo "Name:", $row["Name"], " ", "Type:", $row["Type"], " ", "Description:", $row["Description"], " ", "Price", $row["Price"];
+                echo ("</pre>");
+            }
         }            
     }
     

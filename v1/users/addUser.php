@@ -5,4 +5,4 @@ include("../../objects/Users.php");
 
 
 $user = new User($db);
-$user-> createUser("Ted","Moseby","ted.moseby@bmail.com","Architectdude","123");
+$user-> createUser("Rasmus","Krogh-Andersen","rasmus.kroghandersen@gmail.com","lampscyco","mersedes");

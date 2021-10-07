@@ -22,24 +22,8 @@
 
     if($user->validateToken($token)) {
 
-        $productName = $_GET["ProductName"];
-        $username = $_GET["Username"];
-
-        print_r($cart->Checkout($username, $productName)); 
+        $token = $_GET["Token"];
+ print_r($cart->Checkout($token)); 
     }
-
-
-    /* if($user->validateToken($token)) {
-        
-        
-        print_r($cart->);
-
-    } else {
-        $error = new stdClass();
-        $error->message ="You have been logged out. Please login again";
-        $error->code = "0005";
-        print_r(json_encode($error));
-        die();
-    } */
 
     ?>

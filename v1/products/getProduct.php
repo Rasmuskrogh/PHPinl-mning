@@ -29,11 +29,5 @@ print_r(json_encode($product));
     print_r(json_encode($error));
     die();
 }
-
-/* if(!empty($_GET["id"])) {
-$product->getProduct($_GET["id"]);
-} else {
-    echo "No id specified";
-}*/
 ?>
  
